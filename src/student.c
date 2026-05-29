@@ -47,7 +47,7 @@ static void student_printf_single(const Student* stu) {
 		total_score += stu->scores[i];
 	}
 
-	printf("| %-10s | %-10s | 语文: %-3d | 数学: %-3d | 英语: %-3d | 总分: %-3d |\n",
+	printf("| %s\t| %s\t| 语文: %d\t| 数学: %d\t| 英语: %d\t| 总分: %d\t|\n",
 		stu->id, stu->name,
 		stu->scores[CHINESE], stu->scores[MATH], stu->scores[ENGLISH],
 		total_score);
@@ -184,10 +184,12 @@ void student_print_all(List* list) {
 		printf("系统提示：当前没有任何学生数据\n");
 		return;
 	}
+    // 清空制表位
+    printf("\033[3g");
 
 	printf("\n【学生成绩总表】(总人数: %d)\n", list->size);
 	printf("--------------------------------------------------\n");
-	printf("%-12s\t%-12s\t%-6s\t%-6s\t%-6s\t%-6s\n", "学号", "姓名", "语文", "数学", "英语", "总分");
+	printf("| %s\033[15C\033H| %s\033[12C\033H| %s\033[8C\033H| %s\033[8C\033H| %s\033[8C\033H| %s\033[8C\033H|\n", "学号", "姓名", "语文", "数学", "英语", "总分");
 	printf("--------------------------------------------------\n");
 
 	Node* current = list->head->next;
