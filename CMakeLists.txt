@@ -24,8 +24,23 @@ target_include_directories(StudentSystem PRIVATE
     include
 )
 
-# 5. 跨平台强制 UTF-8 编码 (MSVC 编译器支持)
-if(MSVC)
-    target_compile_options(StudentSystem PRIVATE /utf-8)
+# 5. 跨平台强制 UTF-8 编码
+if(WIN32)
+    # 指定 manifest 文件的绝对路径
+    set(MANIFEST_FILE "${CMAKE_CURRENT_SOURCE_DIR}/app.manifest")
+
+    if(MSVC)
+        target_sources(StudentSystem PRIVATE ${MANIFEST_FILE})
+        target_compile_options(StudentSystem PRIVATE /utf-8)
+    else()
+        # 需要通过资源文件 (.rc) 编译。我们让 CMake 在构建目录中自动生成它。
+        set(RC_FILE "${CMAKE_CURRENT_BINARY_DIR}/app_manifest.rc")
+
+        # 写入 RC 语法: 1 代表 EXE 的 Manifest ID，24 代表 RT_MANIFEST 类型
+        file(WRITE ${RC_FILE} "1 24 \"${MANIFEST_FILE}\"\n")
+
+        # 将生成的 .rc 文件添加到目标源码中，MinGW 会自动调用 windres 编译它
+        target_sources(StudentSystem PRIVATE ${RC_FILE})
+    endif()
 endif()
 
