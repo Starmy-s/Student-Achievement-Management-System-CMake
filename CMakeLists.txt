@@ -9,11 +9,11 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 # 3. 指定所有源文件
 # 建议直接列出你 src 目录下的所有 .c 文件
-set(SOURCES 
-    src/main.c 
-    src/list.c 
+set(SOURCES
+    src/main.c
+    src/list.c
     src/student.c
-    # 如果还有其他 .c 文件，继续在这里列出来
+    src/tui.c
 )
 
 # 4. 创建可执行文件

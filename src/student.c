@@ -10,6 +10,7 @@
 
 #include"list.h"
 #include"student.h"
+#include"ui.h"
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -35,11 +36,21 @@ static Node* find_student_node_by_id(List* list, const char* id) {
 }
 
 /**
+ * @brief 根据分数区间输出带颜色的成绩
+ */
+static void print_colored_score(int score) {
+    const char* color;
+    if (score >= 90)       color = CLR_SCORE_HIGH;
+    else if (score >= 60)  color = CLR_SCORE_MED;
+    else                   color = CLR_SCORE_LOW;
+    printf("%s%-3d%s", color, score, CLR_RESET);
+}
+
+/**
  * @brief 打印单个学生数据
  * @param stu 指向需要打印的学生结构体常量指针
  */
 static void student_printf_single(const Student* stu) {
-	// 防御一下
 	if (stu == NULL) return;
 
 	int total_score = 0;
@@ -47,9 +58,14 @@ static void student_printf_single(const Student* stu) {
 		total_score += stu->scores[i];
 	}
 
-	printf("| %-10s | %-10s | 语文: %-3d | 数学: %-3d | 英语: %-3d | 总分: %-3d |\n",
-		stu->id, stu->name,
-		stu->scores[CHINESE], stu->scores[MATH], stu->scores[ENGLISH],
+	printf(CLR_BORDER "│" CLR_RESET " %-10s " CLR_BORDER "│" CLR_RESET " %-10s " CLR_BORDER "│" CLR_RESET " 语文: ",
+		stu->id, stu->name);
+	print_colored_score(stu->scores[CHINESE]);
+	printf(" " CLR_BORDER "│" CLR_RESET " 数学: ");
+	print_colored_score(stu->scores[MATH]);
+	printf(" " CLR_BORDER "│" CLR_RESET " 英语: ");
+	print_colored_score(stu->scores[ENGLISH]);
+	printf(" " CLR_BORDER "│" CLR_RESET " 总分: " CLR_INFO "%-3d" CLR_RESET " " CLR_BORDER "│" CLR_RESET "\n",
 		total_score);
 }
 
@@ -61,7 +77,7 @@ bool student_add(List* list, const char* id, const char* name, int scores[]) {
 	if (list == NULL || id == NULL || name == NULL) return false;
 	// 学号查重
 	if (find_student_node_by_id(list, id) != NULL) {
-		printf("添加失败：学号 [%s] 已存在！\n", id);
+		printf(CLR_ERROR "添加失败：学号 [%s] 已存在！\n" CLR_RESET, id);
 		return false;
 	}
 
@@ -90,7 +106,7 @@ bool student_add(List* list, const char* id, const char* name, int scores[]) {
 bool student_query_by_id(List* list, const char* id) {
 	Node* target_node = find_student_node_by_id(list, id);
 	if (target_node == NULL) {
-		printf("查询失败：未找到学号为 [%s] 的学生！\n", id);
+		printf(CLR_ERROR "查询失败：未找到学号为 [%s] 的学生！\n" CLR_RESET, id);
 		return false;
 	}
 
@@ -105,7 +121,7 @@ bool student_query_by_id(List* list, const char* id) {
 bool student_delete_by_id(List* list, const char* id) {
 	Node* target_node = find_student_node_by_id(list, id);
 	if (target_node == NULL) {
-		printf("删除失败：未找到学号为 [%s] 的学生！\n", id);
+		printf(CLR_ERROR "删除失败：未找到学号为 [%s] 的学生！\n" CLR_RESET, id);
 		return false;
 	}
 	// 别忘了把结构体里的结构体指针所指的结构体释放，要不然就是垃圾数据了
@@ -122,7 +138,9 @@ int student_query_by_name(List* list, const char* name) {
 
 	int match_count = 0;
 	Node* current = list->head->next;
-	printf("\n--- 开始按姓名 [%s] 搜索 ---\n", name);
+	printf("\n" CLR_BORDER "╔══════════════════════════════════════╗\n" CLR_RESET);
+	printf(CLR_BORDER "║" CLR_RESET "  " CLR_TITLE "按姓名搜索: [%s]" CLR_RESET "                  " CLR_BORDER "║\n" CLR_RESET, name);
+	printf(CLR_BORDER "╚══════════════════════════════════════╝\n" CLR_RESET);
 
 	while (current != list->tail) {
 		Student* student = (Student*)current->data;
@@ -135,10 +153,10 @@ int student_query_by_name(List* list, const char* name) {
 	}
 
 	if (match_count == 0) {
-		printf("提示：未找到任何姓名匹配为 [%s] 的学生。\n", name);
+		printf(CLR_WARNING "提示：未找到任何姓名匹配为 [%s] 的学生。\n" CLR_RESET, name);
 	}
 	else {
-		printf("搜索完毕，共找到 %d 名学生。\n", match_count);
+		printf(CLR_SUCCESS "搜索完毕，共找到 %d 名学生。\n" CLR_RESET, match_count);
 	}
 
 	return match_count;
@@ -167,10 +185,10 @@ int student_delete_by_name(List* list, const char* name) {
 	}
 
 	if (delete_count > 0) {
-		printf("成功：已从系统中批量删除 %d 名姓名为 [%s] 的学生。\n", delete_count, name);
+		printf(CLR_SUCCESS "成功：已从系统中批量删除 %d 名姓名为 [%s] 的学生。\n" CLR_RESET, delete_count, name);
 	}
 	else {
-		printf("提示：未找到姓名匹配为 [%s] 的学生，无数据被删除。\n", name);
+		printf(CLR_WARNING "提示：未找到姓名匹配为 [%s] 的学生，无数据被删除。\n" CLR_RESET, name);
 	}
 
 	return delete_count;
@@ -181,22 +199,37 @@ int student_delete_by_name(List* list, const char* name) {
 */
 void student_print_all(List* list) {
 	if (list == NULL || list->size == 0) {
-		printf("系统提示：当前没有任何学生数据\n");
+		printf(CLR_WARNING "系统提示：当前没有任何学生数据\n" CLR_RESET);
 		return;
 	}
 
-	printf("\n【学生成绩总表】(总人数: %d)\n", list->size);
-	printf("--------------------------------------------------\n");
-	printf("%-12s\t%-12s\t%-6s\t%-6s\t%-6s\t%-6s\n", "学号", "姓名", "语文", "数学", "英语", "总分");
-	printf("--------------------------------------------------\n");
+	printf("\n" CLR_BORDER "╔════════════════════════════════════════════════════════════════════╗\n" CLR_RESET);
+	printf(CLR_BORDER "║" CLR_RESET "  " CLR_TITLE "学生成绩总表" CLR_RESET "     " CLR_INFO "总人数: %-3d" CLR_RESET "                                               " CLR_BORDER "║\n" CLR_RESET, list->size);
+	printf(CLR_BORDER "╠════════════════════════════════════════════════════════════════════╣\n" CLR_RESET);
+	printf(CLR_BORDER "║" CLR_RESET " %-12s " CLR_BORDER "│" CLR_RESET " %-12s " CLR_BORDER "│" CLR_RESET " %-6s " CLR_BORDER "│" CLR_RESET " %-6s " CLR_BORDER "│" CLR_RESET " %-6s " CLR_BORDER "│" CLR_RESET " %-6s " CLR_BORDER "║\n" CLR_RESET,
+		"学号", "姓名", "语文", "数学", "英语", "总分");
+	printf(CLR_BORDER "╠════════════════════════════════════════════════════════════════════╣\n" CLR_RESET);
 
 	Node* current = list->head->next;
 	while (current != list->tail) {
 		Student* student = (Student*)current->data;
-		student_printf_single(student);
+
+		int total = 0;
+		for (int i = 0; i < SUBJECT_COUNT; i++) total += student->scores[i];
+
+		printf(CLR_BORDER "║" CLR_RESET " %-12s " CLR_BORDER "│" CLR_RESET " %-12s " CLR_BORDER "│" CLR_RESET " ",
+			student->id, student->name);
+		print_colored_score(student->scores[CHINESE]);
+		printf(" " CLR_BORDER "│" CLR_RESET " ");
+		print_colored_score(student->scores[MATH]);
+		printf(" " CLR_BORDER "│" CLR_RESET " ");
+		print_colored_score(student->scores[ENGLISH]);
+		printf(" " CLR_BORDER "│" CLR_RESET " " CLR_INFO "%-3d" CLR_RESET " " CLR_BORDER "║\n" CLR_RESET, total);
+
 		current = current->next;
 	}
-	printf("--------------------------------------------------\n");
+
+	printf(CLR_BORDER "╚════════════════════════════════════════════════════════════════════╝\n" CLR_RESET);
 }
 
 /*
