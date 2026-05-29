@@ -414,19 +414,24 @@ int main(void) {
 		if (S.msg_frames > 0) { S.msg_frames--; if (S.msg_frames == 0) S.msg[0] = '\0'; }
 
 		/* ---- DRAW ---- */
-		tui_hide_cursor();
-		tui_draw_borders(&L);
-		tui_draw_header(&L, list->size);
-		tui_draw_sidebar(&L, S.focus);
-		draw_content(&L, &S);
-		tui_draw_footer(&L, prompt_for(&S));
-		/* Clear any leftover content below footer */
-		tui_goto(L.rows - 1, 0);
-		printf("\033[J");
-		tui_goto(L.rows - 3, 3);
-		tui_show_cursor();
-		fflush(stdout);
+			tui_hide_cursor();
 
+			/* 绘制所有面板 */
+			tui_draw_borders(&L);
+			tui_draw_header(&L, list->size);
+			tui_draw_sidebar(&L, S.focus);
+			draw_content(&L, &S);
+			tui_draw_footer(&L, prompt_for(&S));
+
+			/* 重绘内容区右边界竖线 (可能被 \033[K 擦除) */
+			for (int _r = L.content_y0; _r <= L.content_y1; _r++) {
+				tui_goto(_r, L.cols - 2);
+				printf(CLR_BORDER "│" CLR_RESET);
+			}
+
+			tui_goto(L.rows - 3, 3);
+			tui_show_cursor();
+			fflush(stdout);
 		/* ---- INPUT (skip if modal just handled everything) ---- */
 		if (!did_modal) {
 			KeyEvent key = tui_read_key();
