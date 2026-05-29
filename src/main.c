@@ -6,6 +6,12 @@
 #ifdef _WIN32
 #pragma execution_character_set("utf-8")
 #define _CRT_SECURE_NO_WARNINGS
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <Windows.h>
+
 #endif
 
 #include "list.h"
@@ -40,7 +46,7 @@ static int get_int(const char* prompt, int min, int max) {
 	// TODO: 输入的是小数怎么办
 	int value;
 	while (true) {
-		printf(prompt);
+		printf("%s", prompt);
 		if (scanf("%d", &value) == 1) {
 			clear_buffer();
 			if (value < min) {
@@ -319,6 +325,8 @@ void my_exit(List* list) {
 		student_clear_all_data(list);
 		list_destory(list);
 	}
+    // 关闭备用屏幕缓冲区
+    printf("\033[?1049l");
 	printf("\n感谢使用学生成绩管理信息系统，再见！\n");
 	exit(0);
 }
@@ -330,11 +338,7 @@ void my_exit(List* list) {
 void print_menu(List* list, int* choice_ptr)
 {
 	// 清屏
-#ifdef _WIN32
-	system("cls");
-#else
-	system("clear");
-#endif 
+    printf("\033[3J\033[2J\033[H");
 	printf("========================================\n");
 	printf("        学生成绩管理信息系统 v2.0        \n");
 	printf("       [ 当前在册学生总数: %-3d 人 ]      \n", list ? list->size : 0);
@@ -352,6 +356,8 @@ void print_menu(List* list, int* choice_ptr)
 */
 void mainpage(List* list)
 {
+    // 开启备用屏幕缓冲区
+    printf("\033[?1049h");
 	while (1) {
 		int choice;
 		print_menu(list, &choice);
@@ -382,7 +388,12 @@ void mainpage(List* list)
 */
 int main() {
 #ifdef _WIN32
-	system("chcp 65001 > nul");
+    DWORD mode;
+    HANDLE h_stdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    GetConsoleMode(h_stdout, &mode);
+    SetConsoleMode(h_stdout, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
 #endif
 	List* student_list = list_create();
 	if (student_list == NULL) {
