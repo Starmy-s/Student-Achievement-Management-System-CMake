@@ -195,16 +195,29 @@ void student_print_all(List* list) {
 		return;
 	}
 
-	printf("\n" C_TITLE "【学生成绩总表】" COLOR_RESET "(总人数: " C_HIGHLIGHT "%d" COLOR_RESET ")\n", list->size);
-	printf(C_BORDER "------------------------------------------------------------\n" COLOR_RESET);
-	printf(C_LABEL "%-12s\t%-12s\t%-6s\t%-6s\t%-6s\t%-6s\n" COLOR_RESET, "学号", "姓名", "语文", "数学", "英语", "总分");
-	printf(C_BORDER "------------------------------------------------------------\n" COLOR_RESET);
+	//printf("\n" C_TITLE "【学生成绩总表】" COLOR_RESET "(总人数: " C_HIGHLIGHT "%d" COLOR_RESET ")\n", list->size);
+	//printf(C_BORDER "------------------------------------------------------------\n" COLOR_RESET);
+	//printf(C_LABEL "%-12s\t%-12s\t%-6s\t%-6s\t%-6s\t%-6s\n" COLOR_RESET, "学号", "姓名", "语文", "数学", "英语", "总分");
+	//printf(C_BORDER "------------------------------------------------------------\n" COLOR_RESET);
 
+	// 添加分页显示，每20条记录提示用户按 Enter 键继续浏览
 	Node* current = list->head->next;
+	int count = 0;
 	while (current != list->tail) {
+		if (count % 20 == 0) {
+			if (count != 0) {
+				printf(C_HINT "提示：已显示 %d 条记录，按 Enter 键继续浏览..." COLOR_RESET, count);
+				if (getchar() != '\n') return;
+			}
+			printf("\n" C_TITLE "【学生成绩总表】" COLOR_RESET "(总人数: " C_HIGHLIGHT "%d" COLOR_RESET ")\n", list->size);
+			printf(C_BORDER "------------------------------------------------------------\n" COLOR_RESET);
+			printf(C_LABEL "%-12s\t%-12s\t%-6s\t%-6s\t%-6s\t%-6s\n" COLOR_RESET, "学号", "姓名", "语文", "数学", "英语", "总分");
+			printf(C_BORDER "------------------------------------------------------------\n" COLOR_RESET);
+		}
 		Student* student = (Student*)current->data;
 		student_printf_single(student, 0);
 		current = current->next;
+		count++;
 	}
 	printf(C_BORDER "------------------------------------------------------------\n" COLOR_RESET);
 }

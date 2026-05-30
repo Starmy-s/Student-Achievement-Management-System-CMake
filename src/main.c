@@ -235,7 +235,6 @@ void put(List* list) {
 	}
 	Node* current = list->head->next;
 	while (current != list->tail) {
-		// TODO: 最好不要存next指针
 		Student* student = (Student*)current->data;
 		fwrite(student, sizeof(Student), 1, fp);
 		current = current->next;
@@ -328,7 +327,7 @@ void my_exit(List* list) {
 		list_destory(list);
 	}
     // 关闭备用屏幕缓冲区
-    printf("\033[?1049l");
+    //printf("\033[?1049l");
 	printf(C_TITLE "\n感谢使用学生成绩管理信息系统，再见！\n" COLOR_RESET);
 	exit(0);
 }
@@ -359,7 +358,7 @@ void print_menu(List* list, int* choice_ptr)
 void mainpage(List* list)
 {
     // 开启备用屏幕缓冲区
-    printf("\033[?1049h");
+    //printf("\033[?1049h");
 	while (1) {
 		int choice;
 		print_menu(list, &choice);
