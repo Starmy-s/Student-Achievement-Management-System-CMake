@@ -56,7 +56,7 @@ static void student_printf_single(const Student* stu, int op) {
 			total_score);
 	}
 	else if (op == 1) {
-		printf(C_BORDER "|" COLOR_RESET " " C_LABEL "学号:" COLOR_RESET " " C_VALUE "%-10s" COLOR_RESET " " C_BORDER "|" COLOR_RESET " " C_LABEL "姓名:" COLOR_RESET " " C_VALUE "%-10s" COLOR_RESET " " C_BORDER "|" COLOR_RESET " " C_LABEL "语文:" COLOR_RESET " " C_HIGHLIGHT "%-3d" COLOR_RESET " " C_BORDER "|" COLOR_RESET " " C_LABEL "数学:" COLOR_RESET " " C_HIGHLIGHT "%-3d" COLOR_RESET " " C_BORDER "|" COLOR_RESET " " C_LABEL "英语:" COLOR_RESET " " C_HIGHLIGHT "%-3d" COLOR_RESET " " C_BORDER "|" COLOR_RESET " " C_LABEL "总分:" COLOR_RESET " " C_HIGHLIGHT "%-3d" COLOR_RESET " " C_BORDER "|\n" COLOR_RESET,
+		printf(C_BORDER "|" COLOR_RESET " " C_LABEL "学号:" COLOR_RESET " " C_VALUE "%-15s" COLOR_RESET " " C_BORDER "|" COLOR_RESET " " C_LABEL "姓名:" COLOR_RESET " " C_VALUE "%-10s" COLOR_RESET " " C_BORDER "|" COLOR_RESET " " C_LABEL "语文:" COLOR_RESET " " C_HIGHLIGHT "%-3d" COLOR_RESET " " C_BORDER "|" COLOR_RESET " " C_LABEL "数学:" COLOR_RESET " " C_HIGHLIGHT "%-3d" COLOR_RESET " " C_BORDER "|" COLOR_RESET " " C_LABEL "英语:" COLOR_RESET " " C_HIGHLIGHT "%-3d" COLOR_RESET " " C_BORDER "|" COLOR_RESET " " C_LABEL "总分:" COLOR_RESET " " C_HIGHLIGHT "%-3d" COLOR_RESET " " C_BORDER "|\n" COLOR_RESET,
 			stu->id, stu->name,
 			stu->scores[CHINESE], stu->scores[MATH], stu->scores[ENGLISH],
 			total_score);
