@@ -223,6 +223,7 @@ void find(List* list) {
  * @brief 数据导出函数，将链表中的学生数据写入文件保存
  */
 void put(List* list) {
+	// TODO: 可以考虑添加文件头
 	if (list == NULL || list->size == 0) {
 		printf(C_WARN "链表为空，不需要导出数据！\n" COLOR_RESET);
 		return;
