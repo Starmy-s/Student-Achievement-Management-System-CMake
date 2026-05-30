@@ -446,19 +446,19 @@ void tui_draw_dashboard(const TUILayout* layout, List* list, const char* msg) {
 	int card_x = x + 4;
 	tui_goto(y,   card_x);      printf(CLR_INFO "┌──────────┐" CLR_RESET);
 	tui_goto(y+1, card_x);      printf(CLR_INFO "│" CLR_RESET " " ANSI_BRIGHT_YELLOW "%-8d" CLR_RESET " " CLR_BORDER "│" CLR_RESET, total);
-	tui_goto(y+2, card_x);      printf(CLR_INFO "│" CLR_RESET " " ANSI_BRIGHT_WHITE "%-8s" CLR_RESET " " CLR_BORDER "│" CLR_RESET, "总人数");
+	tui_goto(y+2, card_x);      printf(CLR_INFO "│" CLR_RESET " " ANSI_BRIGHT_WHITE "%-11s" CLR_RESET " " CLR_BORDER "│" CLR_RESET, "总人数");
 	tui_goto(y+3, card_x);      printf(CLR_INFO "└──────────┘" CLR_RESET);
 
 	card_x += 14;
 	tui_goto(y,   card_x);      printf(CLR_INFO "┌──────────┐" CLR_RESET);
 	tui_goto(y+1, card_x);      printf(CLR_INFO "│" CLR_RESET " " ANSI_BRIGHT_GREEN "%-8d" CLR_RESET " " CLR_BORDER "│" CLR_RESET, pass);
-	tui_goto(y+2, card_x);      printf(CLR_INFO "│" CLR_RESET " " ANSI_BRIGHT_WHITE "%-8s" CLR_RESET " " CLR_BORDER "│" CLR_RESET, "通过");
+	tui_goto(y+2, card_x);      printf(CLR_INFO "│" CLR_RESET " " ANSI_BRIGHT_WHITE "%-10s" CLR_RESET " " CLR_BORDER "│" CLR_RESET, "通过");
 	tui_goto(y+3, card_x);      printf(CLR_INFO "└──────────┘" CLR_RESET);
 
 	card_x += 14;
 	tui_goto(y,   card_x);      printf(CLR_INFO "┌──────────┐" CLR_RESET);
 	tui_goto(y+1, card_x);      printf(CLR_INFO "│" CLR_RESET " " ANSI_BRIGHT_RED "%-8d" CLR_RESET " " CLR_BORDER "│" CLR_RESET, fail);
-	tui_goto(y+2, card_x);      printf(CLR_INFO "│" CLR_RESET " " ANSI_BRIGHT_WHITE "%-8s" CLR_RESET " " CLR_BORDER "│" CLR_RESET, "未通过");
+	tui_goto(y+2, card_x);      printf(CLR_INFO "│" CLR_RESET " " ANSI_BRIGHT_WHITE "%-11s" CLR_RESET " " CLR_BORDER "│" CLR_RESET, "未通过");
 	tui_goto(y+3, card_x);      printf(CLR_INFO "└──────────┘" CLR_RESET);
 	y += 5;
 
@@ -487,8 +487,8 @@ void tui_draw_dashboard(const TUILayout* layout, List* list, const char* msg) {
 		/* -- 表格顶部 -- */
 		tui_goto(y, x);
 		printf(CLR_BORDER "║ " CLR_BORDER "┌");
-		for (int i = 0; i < table_w - 2; i++) printf("─");
-		printf("┐" CLR_RESET "\033[K");
+		for (int i = 0; i < table_w - 4; i++) printf("─");
+		printf("┐"" ║" CLR_RESET "\033[K");
 		y++;
 
 		/* -- 表头 -- */
@@ -499,7 +499,7 @@ void tui_draw_dashboard(const TUILayout* layout, List* list, const char* msg) {
 		tui_goto(y, col_ma); printf(ANSI_BRIGHT_BLUE "%4s"   CLR_RESET, "数学");
 		tui_goto(y, col_en); printf(ANSI_BRIGHT_BLUE "%4s"   CLR_RESET, "英语");
 		tui_goto(y, col_tot);printf(ANSI_BRIGHT_BLUE "%4s"   CLR_RESET, "总分");
-		tui_goto(y, col_rb); printf(CLR_BORDER "│" CLR_RESET "\033[K");
+		tui_goto(y, col_rb); printf(CLR_BORDER "│"" ║" CLR_RESET "\033[K");
 		y++;
 
 		/* -- 数据行 -- */
@@ -546,15 +546,15 @@ void tui_draw_dashboard(const TUILayout* layout, List* list, const char* msg) {
 		else {
 			tui_goto(y, x);      printf(CLR_BORDER "║ " CLR_BORDER "│" CLR_RESET);
 			tui_goto(y, col_id); printf(CLR_INFO "(暂无数据)" CLR_RESET);
-			tui_goto(y, col_rb); printf(CLR_BORDER "│" CLR_RESET "\033[K");
+			tui_goto(y, col_rb); printf(CLR_BORDER "│"" ║" CLR_RESET "\033[K");
 			y++;
 		}
 
 		/* -- 表格底部 -- */
 		tui_goto(y, x);
 		printf(CLR_BORDER "║ " CLR_BORDER "└");
-		for (int i = 0; i < table_w - 2; i++) printf("─");
-		printf("┘" CLR_RESET "\033[K");
+		for (int i = 0; i < table_w - 4; i++) printf("─");
+		printf("┘"" ║" CLR_RESET "\033[K");
 		y++;
 
 		/* -- Dashboard 底部 -- */
